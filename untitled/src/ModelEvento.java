@@ -1,7 +1,3 @@
-package Evento;
-
-import Pessoa.ModelPessoa;
-
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +9,7 @@ public class ModelEvento {
     private ModelPessoa administrador;
 
     public ModelPessoa getAdministrador() {
-        return Administrador;
+        return administrador;
     }
 
     public List<ModelPessoa> getEstudantes() {

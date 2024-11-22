@@ -1,11 +1,7 @@
-package Pessoa;
-
-import Evento.ModelEvento;
-
 import java.util.Date;
 import java.util.List;
 
-public class ModelPessoa {
+public class ModelPessoa{
 
     private String indentificador;
     private String nome;
@@ -35,6 +31,15 @@ public class ModelPessoa {
 
     public boolean AddEvento(ModelEvento evento){
         return eventosInscritos.add(evento);
+    }
+
+    public boolean DeleteEvento(ModelEvento evento){
+        for(ModelEvento eventoIncrito: eventosInscritos){
+            if(eventoIncrito.getIdentificador().equals(evento.getIdentificador())){
+                return eventosInscritos.remove(evento);
+            }
+        }
+        return false;
     }
 
     public ModelPessoa(String indentificador, String nome, Date dataNascimento, TipoPessoa tipoPessoa) {

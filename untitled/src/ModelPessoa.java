@@ -3,14 +3,14 @@ import java.util.List;
 
 public class ModelPessoa{
 
-    private String indentificador;
+    private int identificador;
     private String nome;
     private Date DataNascimento;
     private TipoPessoa tipoPessoa;
     private List<ModelEvento> eventosInscritos;
 
-    public String getIndentificador() {
-        return indentificador;
+    public int getIdentificador() {
+        return identificador;
     }
 
     public String getNome() {
@@ -34,16 +34,16 @@ public class ModelPessoa{
     }
 
     public boolean DeleteEvento(ModelEvento evento){
-        for(ModelEvento eventoIncrito: eventosInscritos){
-            if(eventoIncrito.getIdentificador().equals(evento.getIdentificador())){
+        for(ModelEvento eventoInscrito: eventosInscritos){
+            if(eventoInscrito.getIdentificador() == evento.getIdentificador()){
                 return eventosInscritos.remove(evento);
             }
         }
         return false;
     }
 
-    public ModelPessoa(String indentificador, String nome, Date dataNascimento, TipoPessoa tipoPessoa) {
-        this.indentificador = indentificador;
+    public ModelPessoa(int identificador, String nome, Date dataNascimento, TipoPessoa tipoPessoa) {
+        this.identificador = identificador;
         this.nome = nome;
         DataNascimento = dataNascimento;
         this.tipoPessoa = tipoPessoa;
@@ -52,7 +52,7 @@ public class ModelPessoa{
     @Override
     public String toString() {
         return "Pessoa{" +
-                "indentificador='" + indentificador + '\'' +
+                "indentificador='" + identificador + '\'' +
                 ", nome='" + nome + '\'' +
                 ", DataNascimento=" + DataNascimento +
                 ", tipoPessoa=" + tipoPessoa +

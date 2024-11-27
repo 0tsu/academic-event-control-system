@@ -1,11 +1,11 @@
 import java.util.Date;
 import java.util.List;
 
-public class ModelEvento {
-    private String identificador;
+public class ModelEvento extends Exceptions{
+    private int identificador;
     private Date inicioEvento;
     private Date terminoEvento;
-    private List<ModelPessoa> Estudantes;
+    private List<ModelPessoa> estudantes;
     private ModelPessoa administrador;
 
     public ModelPessoa getAdministrador() {
@@ -13,7 +13,24 @@ public class ModelEvento {
     }
 
     public List<ModelPessoa> getEstudantes() {
-        return Estudantes;
+        return estudantes;
+    }
+
+    public boolean AddEstudante(ModelPessoa pessoa){
+        if(estudantes.size() == 10){
+            System.out.println(CapacidadeExcedidaException());
+            return false;
+        }
+        return estudantes.add(pessoa);
+    }
+
+    public boolean DeleteEstudante(ModelPessoa pessoa){
+        for(ModelPessoa estudanteInscrito: estudantes){
+            if(estudanteInscrito.getIdentificador() == pessoa.getIdentificador()){
+                return estudantes.remove(pessoa);
+            }
+        }
+        return false;
     }
 
     public Date getTerminoEvento() {
@@ -24,11 +41,11 @@ public class ModelEvento {
         return inicioEvento;
     }
 
-    public String getIdentificador() {
+    public int getIdentificador() {
         return identificador;
     }
 
-    public ModelEvento(String identificador, Date inicioEvento, Date terminoEvento, ModelPessoa administrador) {
+    public ModelEvento(int identificador, Date inicioEvento, Date terminoEvento, ModelPessoa administrador) {
         this.identificador = identificador;
         this.inicioEvento = inicioEvento;
         this.terminoEvento = terminoEvento;

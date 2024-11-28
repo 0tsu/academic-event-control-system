@@ -3,10 +3,21 @@ import java.util.List;
 
 public class ModelEvento extends Exceptions{
     private int identificador;
+    private String nome;
+
+    public String getNome() {
+        return nome;
+    }
+
     private Date inicioEvento;
     private Date terminoEvento;
     private List<ModelPessoa> estudantes;
     private ModelPessoa administrador;
+    private TipoEvento tipoEvento;
+
+    public TipoEvento getTipoEvento() {
+        return tipoEvento;
+    }
 
     public ModelPessoa getAdministrador() {
         return administrador;
@@ -45,10 +56,24 @@ public class ModelEvento extends Exceptions{
         return identificador;
     }
 
-    public ModelEvento(int identificador, Date inicioEvento, Date terminoEvento, ModelPessoa administrador) {
+    public ModelEvento(int identificador,String nome, Date inicioEvento, Date terminoEvento, ModelPessoa administrador, TipoEvento tipoEvento) {
         this.identificador = identificador;
+        this.nome = nome;
         this.inicioEvento = inicioEvento;
         this.terminoEvento = terminoEvento;
         this.administrador = administrador;
+        this.tipoEvento = tipoEvento;
+    }
+
+    @Override
+    public String toString() {
+        return "ModelEvento{" +
+                "identificador=" + identificador +
+                ", \ninicioEvento=" + inicioEvento +
+                ", \nterminoEvento=" + terminoEvento +
+                ", \ntipo evento=" + tipoEvento +
+                ", \nadministrador=" + administrador +
+                ", \nestudantes=" + estudantes +
+                '}';
     }
 }

@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +9,7 @@ public class ModelPessoa{
     private String nome;
     private Date DataNascimento;
     private TipoPessoa tipoPessoa;
-    private List<ModelEvento> eventosInscritos;
+    private List<ModelEvento> eventosInscritos = new ArrayList<ModelEvento>();
 
     public int getIdentificador() {
         return identificador;
@@ -27,6 +29,12 @@ public class ModelPessoa{
 
     public List<ModelEvento> getEventosInscritos() {
         return eventosInscritos;
+    }
+
+    public int getEventosInscritosSize() {
+        if(eventosInscritos == null)
+            return 0;
+        return eventosInscritos.size();
     }
 
     public boolean AddEvento(ModelEvento evento){
@@ -54,9 +62,9 @@ public class ModelPessoa{
         return "Pessoa{" +
                 "indentificador='" + identificador + '\'' +
                 ", nome='" + nome + '\'' +
-                ", DataNascimento=" + DataNascimento +
+                ", DataNascimento=" + new SimpleDateFormat("yyyy-MM-dd").format(DataNascimento) +
                 ", tipoPessoa=" + tipoPessoa +
-                ", eventosInscritos=" + eventosInscritos +
+                //", eventosInscritos=" + eventosInscritos +
                 '}';
     }
 }

@@ -1,19 +1,20 @@
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class ModelEvento extends Exceptions{
     private int identificador;
     private String nome;
+    private Date inicioEvento;
+    private Date terminoEvento;
+    private List<ModelPessoa> estudantes = new ArrayList<ModelPessoa>();
+    private ModelPessoa administrador;
+    private TipoEvento tipoEvento;
 
     public String getNome() {
         return nome;
     }
-
-    private Date inicioEvento;
-    private Date terminoEvento;
-    private List<ModelPessoa> estudantes;
-    private ModelPessoa administrador;
-    private TipoEvento tipoEvento;
 
     public TipoEvento getTipoEvento() {
         return tipoEvento;
@@ -27,8 +28,14 @@ public class ModelEvento extends Exceptions{
         return estudantes;
     }
 
+    public int getEstudantesSize() {
+        if(estudantes == null)
+            return 0;
+        return estudantes.size();
+    }
+
     public boolean AddEstudante(ModelPessoa pessoa){
-        if(estudantes.size() == 10){
+        if(estudantes.size() >= 10){
             System.out.println(CapacidadeExcedidaException());
             return false;
         }
@@ -69,11 +76,11 @@ public class ModelEvento extends Exceptions{
     public String toString() {
         return "ModelEvento{" +
                 "identificador=" + identificador +
-                ", \ninicioEvento=" + inicioEvento +
-                ", \nterminoEvento=" + terminoEvento +
+                ", \ninicioEvento=" + new SimpleDateFormat("yyyy-MM-dd").format(inicioEvento) +
+                ", \nterminoEvento=" + new SimpleDateFormat("yyyy-MM-dd").format(terminoEvento) +
                 ", \ntipo evento=" + tipoEvento +
                 ", \nadministrador=" + administrador +
-                ", \nestudantes=" + estudantes +
+                //", \nestudantes=" + estudantes +
                 '}';
     }
 }

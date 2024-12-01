@@ -4,14 +4,14 @@ import java.util.*;
 
 public class Dados extends Exceptions{
 
-    Scanner sc = new Scanner(System.in);
-    SimpleDateFormat dateNascimanto = new SimpleDateFormat("dd/MM/yyyy");
-    SimpleDateFormat dateEvento = new SimpleDateFormat("dd/MM/yyyy");
+    private Scanner sc = new Scanner(System.in);
+    private SimpleDateFormat dateNascimanto = new SimpleDateFormat("dd/MM/yyyy");
+    private SimpleDateFormat dateEvento = new SimpleDateFormat("dd/MM/yyyy");
 
     private List<ModelEvento> eventos = new ArrayList<ModelEvento>();
     private List<ModelPessoa> estudantes = new ArrayList<ModelPessoa>();
-    ModelPessoa estudante;
-    ModelEvento evento;
+    private ModelPessoa estudante;
+    private ModelEvento evento;
 
     private int pessoaId = 1;
     private int eventoId = 1;
@@ -29,8 +29,8 @@ public class Dados extends Exceptions{
         System.out.print("Informe a data de nascimento do administrador (dd/mm/yyyy): ");
         while(true) {
             try {
+                System.out.print("Informe a data de nascimento do administrador (dd/mm/yyyy): ");
                 nascimento = dateNascimanto.parse(sc.next());
-                System.out.println("Data de nascimento armazenada: " + nascimento);
                 break;
             } catch (Exception e) {
                 System.out.println("Formato de data inválido. Por favor, tente novamente.");
@@ -40,20 +40,31 @@ public class Dados extends Exceptions{
     }
 
     public TipoEvento SelecionaTipoEvento(int opc){
-        switch (opc){
-            case 1:
-                return TipoEvento.COMPETICAO;
-            case 2:
-                return TipoEvento.MINICURSO;
-            case 3:
-                return TipoEvento.PALESTRA;
-            case 4:
-                return TipoEvento.WORKSHOP;
-            case 5:
-                return TipoEvento.SEMINARIO;
-            default:
-                return null;
-        }
+        boolean IsInvalid = true;
+        while(IsInvalid)
+            switch (opc){
+                case 1:
+                    return TipoEvento.COMPETICAO;
+                case 2:
+                    return TipoEvento.MINICURSO;
+                case 3:
+                    return TipoEvento.PALESTRA;
+                case 4:
+                    return TipoEvento.WORKSHOP;
+                case 5:
+                    return TipoEvento.SEMINARIO;
+                default:
+                    System.out.println("Opção invalida digite uma opção valida!");
+                    System.out.println("Informe o tipo do evento \n" +
+                            "1-COMPETICAO\n" +
+                            "2-MINICURSO\n" +
+                            "3-PALESTRA\n" +
+                            "4-WORKSHOP\n" +
+                            "5-SEMINARIO");
+                    opc = sc.nextInt();
+                    break;
+            }
+        return null;
     }
 
     public ModelEvento GeraEvento(){
@@ -65,7 +76,7 @@ public class Dados extends Exceptions{
 
         while(true) {
             try {
-                System.out.println("Informe o inicio do evento dd/MM/YYYY hh:mm: ");
+                System.out.println("Informe o inicio do evento dd/MM/YYYY: ");
                 inicioEvento = dateEvento.parse(sc.next());
                 break;
             } catch (Exception e) {
@@ -74,7 +85,7 @@ public class Dados extends Exceptions{
         }
         while(true) {
             try {
-                System.out.println("Informe o termino do evento dd/MM/YYYY hh:mm: ");
+                System.out.println("Informe o termino do evento dd/MM/YYYY: ");
                 terminoEvento = dateEvento.parse(sc.next());
                 break;
             } catch (Exception e) {
@@ -88,9 +99,12 @@ public class Dados extends Exceptions{
                            "3-PALESTRA\n" +
                            "4-WORKSHOP\n" +
                            "5-SEMINARIO");
+
         TipoEvento tipoEvento = SelecionaTipoEvento(sc.nextInt());
 
-        return new ModelEvento(eventoId, nome, inicioEvento, terminoEvento, administrador, tipoEvento);
+        ModelEvento evento = new ModelEvento(eventoId, nome, inicioEvento, terminoEvento, administrador, tipoEvento);
+        administrador.AddEvento(evento);
+        return evento;
     }
 
     public ModelPessoa GeraEstudante(){
@@ -106,18 +120,19 @@ public class Dados extends Exceptions{
                 System.out.println("Formato de data inválido. Por favor, tente novamente.");
             }
         }
-        return new ModelPessoa(pessoaId, nome, nascimento, TipoPessoa.ESTUDANTE);
+        estudante = new ModelPessoa(pessoaId, nome, nascimento, TipoPessoa.ESTUDANTE);
+        return estudante;
     }
 
     public void MostrarEventos(){
         for(ModelEvento evento: eventos){
-            System.out.println(evento.toString() +"\n");
+            System.out.println(evento.toString());
         }
     }
 
     public void MostrarEstudantes(){
         for(ModelPessoa estudante: estudantes){
-            System.out.println(estudante.toString() + "\n");
+            System.out.println(estudante.toString());
         }
     }
 
@@ -171,15 +186,21 @@ public class Dados extends Exceptions{
     public void MostrarEventosQuantidade(){
         eventos.sort(Comparator.comparing(e -> e.getEstudantes().size()));
 
-        for(ModelEvento evento : eventos){
-            System.out.println(evento.toString());
-        }
+        MostrarEventos();
     }
 
     public void MostrarEventosTipoEvento(){
+        TipoEvento beforeTipoEvento = null;
+        TipoEvento afterTipoEvento = null;
         eventos.sort(Comparator.comparing(e -> e.getTipoEvento()));
 
         for(ModelEvento evento : eventos){
+            afterTipoEvento = evento.getTipoEvento();
+            if(beforeTipoEvento != afterTipoEvento) {
+                beforeTipoEvento = afterTipoEvento;
+                System.out.println("Eventos do tipo "+ beforeTipoEvento);
+            }
+
             System.out.println(evento.toString());
         }
     }
@@ -187,12 +208,13 @@ public class Dados extends Exceptions{
     public void MostrarEventosPeriodo(Date inicio, Date termino, int periodo){
         for(ModelEvento evento : eventos){
             if(periodo == 1){
-                if(evento.getInicioEvento().after(inicio) && evento.getInicioEvento().before(termino)){
+                if (evento.getInicioEvento().compareTo(inicio) >=0  && evento.getInicioEvento().compareTo(termino) <= 0) {
                     System.out.println(evento.toString());
                 }
             }
             else if (periodo == 2){
-                if(evento.getTerminoEvento().after(inicio) && evento.getTerminoEvento().before(termino)){
+
+                if(evento.getTerminoEvento().compareTo(inicio) >=0  && evento.getTerminoEvento().compareTo(termino) <= 0){
                     System.out.println(evento.toString());
                 }
             }
@@ -208,11 +230,6 @@ public class Dados extends Exceptions{
                 break;
 
             case 2:
-                if(eventos.isEmpty()){
-                    System.out.println(NaoContemEventosException());
-                    break;
-                }
-
                 estudantes.add(GeraEstudante());
                 pessoaId++;
 
@@ -220,24 +237,48 @@ public class Dados extends Exceptions{
                 break;
 
             case 3:
+                if (estudantes.size() == 0) {
+                    System.out.println(NaoContemEstudanteException());
+                    break;
+                }
+
                 MostrarEstudantes();
                 System.out.print("Informe o estudante que deseja excluir: ");
                 estudante = getEstudante(sc.nextInt());
-                if(estudante == null){
+
+                if(estudante == null) {
                     System.out.println(UsuarioNaoEncontratoException());
                     break;
                 }
-                if(!estudante.getEventosInscritos().isEmpty()){
+
+                if(estudante.getTipoPessoa() == TipoPessoa.ADMINISTRADOR){
+                    System.out.println("Operação não permitida, é proibida a exclusão de um administrador!");
+                    break;
+                }
+
+                if(estudante.getEventosInscritosSize() > 0){
                     System.out.println(ContemEventosInscritosException());
                     break;
                 }
+
                 ExcluirEstudante(estudante);
                 break;
 
             case 4:
+                if(estudantes.size() == 0){
+                    System.out.println(NaoContemEstudanteException());
+                    break;
+                }
+
+                if(eventos.isEmpty()){
+                    System.out.println(NaoContemEventosException());
+                    break;
+                }
+
                 MostrarEstudantes();
                 System.out.print("Informe o estudante que deseja registrar em um evento: ");
                 estudante = getEstudante(sc.nextInt());
+
                 if(estudante == null){
                     System.out.println(UsuarioNaoEncontratoException());
                     break;
@@ -319,7 +360,7 @@ public class Dados extends Exceptions{
                 Date terminoEvento;
                 while(true) {
                     try {
-                        System.out.println("Informe o inicio do evento dd/MM/YYYY hh:mm: ");
+                        System.out.println("Informe o inicio dd/MM/YYYY: ");
                         inicioEvento = dateEvento.parse(sc.next());
                         break;
                     } catch (Exception e) {
@@ -328,7 +369,7 @@ public class Dados extends Exceptions{
                 }
                 while(true) {
                     try {
-                        System.out.println("Informe o inicio do evento dd/MM/YYYY hh:mm: ");
+                        System.out.println("Informe o termino dd/MM/YYYY: ");
                         terminoEvento = dateEvento.parse(sc.next());
                         break;
                     } catch (Exception e) {

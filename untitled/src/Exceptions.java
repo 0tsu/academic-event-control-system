@@ -7,6 +7,10 @@ public abstract class Exceptions {
         return "NaoContemEventosException: Não Existe nem um evento registrado na base de dados!";
     }
 
+    protected String NaoContemEstudanteException(){
+        return "NaoContemEstudanteException: Não Existe nem um estudante registrado na base de dados!";
+    }
+
     protected String ContemEventosInscritosException(){
         return "ContemEventosInscritosException: Operação não permitida! Este estudante tem evento(s) inscrito(s)";
     }
